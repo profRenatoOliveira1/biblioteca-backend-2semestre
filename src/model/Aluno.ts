@@ -184,10 +184,6 @@ export class Aluno {
         this.statusAluno = _statusAluno;
     }
 
-    static validacaoObjeto(aluno: Aluno): boolean {
-        return !!(aluno && aluno.getNome() && aluno.getSobrenome() && aluno.getEmail() && aluno.getCelular());
-    }    
-
     // MÉTODO PARA ACESSAR O BANCO DE DADOS
     // CRUD Create - READ - Update - Delete
 
@@ -294,11 +290,10 @@ export class Aluno {
      * @param aluno Objeto Aluno contendo as informações a serem cadastradas
      * @returns Boolean indicando se o cadastro foi bem-sucedido
      */
-    static async cadastrarAluno(aluno: Aluno): Promise<number> {
+    static async cadastrarAluno(aluno: Aluno): Promise<boolean> {
         try {
-            if (this.validacaoObjeto(aluno)) {
-                // Cria a consulta (query) para inserir o registro de um aluno no banco de dados, retorna o ID do aluno que foi criado no final
-                const queryInsertAluno = `INSERT INTO Aluno (nome, sobrenome, data_nascimento, endereco, email, celular)
+            // Cria a consulta (query) para inserir o registro de um aluno no banco de dados, retorna o ID do aluno que foi criado no final
+            const queryInsertAluno = `INSERT INTO Aluno (nome, sobrenome, data_nascimento, endereco, email, celular)
                                             VALUES (
                                                 '${aluno.getNome().toUpperCase()}',
                                                 '${aluno.getSobrenome().toUpperCase()}',
@@ -309,26 +304,25 @@ export class Aluno {
                                             )
                                             RETURNING id_aluno;`;
 
-                // Executa a query no banco de dados e armazena o resultado
-                const result = await database.query(queryInsertAluno);
+            // Executa a query no banco de dados e armazena o resultado
+            const result = await database.query(queryInsertAluno);
 
-                // verifica se a quantidade de linhas que foram alteradas é maior que 0
-                if (result.rows.length > 0) {
-                    // Exibe a mensagem de sucesso
-                    console.log(`Aluno cadastrado com sucesso. ID: ${result.rows[0].id_aluno}`);
-                    // retorna verdadeiro
-                    return 1;
-                }
+            // verifica se a quantidade de linhas que foram alteradas é maior que 0
+            if (result.rows.length > 0) {
+                // Exibe a mensagem de sucesso
+                console.log(`Aluno cadastrado com sucesso. ID: ${result.rows[0].id_aluno}`);
+                // retorna verdadeiro
+                return true;
             }
 
             // caso a consulta não tenha tido sucesso, retorna falso
-            return 9;
-        // captura erro
+            return false;
+            // captura erro
         } catch (error) {
             // Exibe mensagem com detalhes do erro no console
             console.error(`Erro ao cadastrar aluno: ${error}`);
             // retorna falso
-            return 0;
+            return false;
         }
     }
 
@@ -369,7 +363,7 @@ export class Aluno {
             // retorna o resultado da query
             return 9;
 
-        // captura qualquer erro que aconteça
+            // captura qualquer erro que aconteça
         } catch (error) {
             // Em caso de erro na consulta, exibe o erro no console e retorna false.
             console.log(`Erro na consulta: ${error}`);
