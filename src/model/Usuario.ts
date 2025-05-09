@@ -13,6 +13,7 @@ export class Usuario {
     private username: string; // Nome de usuário (login)
     private email: string; // Endereço de e-mail do usuário
     private senha: string = ''; // Senha do usuário
+    private imagemPerfil: string = '' // Imagem de perfil do usuário
 
     /**
      * Construtor da classe Usuario
@@ -128,6 +129,22 @@ export class Usuario {
     }
 
     /**
+     * Retorna a o caminho da imagem do usuario
+     * @returns caminho da imagem do usuário
+     */
+    public getImagemPerfil(): string {
+        return this.imagemPerfil;
+    }
+
+    /**
+     * Atribui um valor à imagem do usuário
+     * @param senha caminho da imagem do usuário
+     */
+    public setImagemPerfil(imagem: string): void {
+        this.imagemPerfil = imagem;
+    }
+
+    /**
      * Retorna uma lista com todos os usuários cadastrados no banco de dados
      * @returns Lista com todos os usuários cadastrados ou null em caso de erro
      */
@@ -166,5 +183,57 @@ export class Usuario {
             console.log(`Erro ao recuperar usuários. ${error}`);
             return null;
         }
+    }
+
+    /**
+     * Cadastra um usuário no banco de dados
+     * 
+     * @param usuario Usuário a ser cadastrado 
+     * @returns o UUID do usuário cadastrado
+     */
+    static async cadastroUsuario(usuario: Usuario): Promise<string | null> {
+        try {
+            // Define a query SQL para inserir um novo usuário com nome, username, email e senha
+            // A cláusula RETURNING uuid retorna o identificador gerado automaticamente pelo banco
+            const query = `
+          INSERT INTO usuario (nome, username, email, senha)
+          VALUES ($1, $2, $3, $4)
+          RETURNING uuid
+        `;
+
+            // Define os valores que serão usados na query (evita SQL Injection)
+            const valores = [usuario.nome, usuario.username, usuario.email, usuario.senha];
+
+            // Executa a query no banco de dados e aguarda a resposta
+            const resultado = await database.query(query, valores);
+
+            // Obtém o uuid gerado pelo banco de dados a partir do resultado da query
+            const uuid = resultado.rows[0].uuid;
+
+            // Atribui o uuid ao objeto do usuário, caso precise ser usado depois
+            usuario.uuidUsuario = uuid;
+
+            // Retorna o uuid como confirmação do cadastro
+            return uuid;
+        } catch (error) {
+            // Em caso de erro, exibe no console para ajudar na identificação do problema
+            console.error('Erro ao salvar usuário:', error);
+
+            // Retorna null para indicar que o cadastro não foi concluído
+            return null;
+        }
+    }
+
+    /**
+     * Atualiza o caminho da imagem de perfil no cadastro do usuário
+     * @param uuid UUID do usuário, que representará o nome da imagem
+     * @param nomeArquivo O nome do arquivo a ser salvo
+     */
+    static async atualizarImagemPerfil(uuid: string, nomeArquivo: string): Promise<void> {
+        // Define a query SQL que atualiza o campo imagem_perfil do usuário com o nome do arquivo
+        const query = `UPDATE usuario SET imagem_perfil = $1 WHERE uuid = $2`;
+
+        // Executa a query passando o nome do arquivo e o uuid do usuário como parâmetros
+        await database.query(query, [nomeArquivo, uuid]);
     }
 }

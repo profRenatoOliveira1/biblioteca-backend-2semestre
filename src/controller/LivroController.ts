@@ -49,6 +49,8 @@ class LivroController extends Livro {
         try {
             const dadosRecebidos: LivroDTO = req.body;
             
+            console.log(dadosRecebidos);
+
             // Instanciando objeto Livro
             const novoLivro = new Livro(
                 dadosRecebidos.titulo,
@@ -61,6 +63,8 @@ class LivroController extends Livro {
                 dadosRecebidos.valorAquisicao ?? 0,
                 dadosRecebidos.statusLivroEmprestado ?? 'Disponível'
             );
+
+            console.log(novoLivro);
 
             // Chama o método para persistir o livro no banco de dados
             const result = await Livro.cadastrarLivro(novoLivro);
