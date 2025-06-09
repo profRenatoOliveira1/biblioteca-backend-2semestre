@@ -6,3 +6,5 @@ dist/
 
 # Ignorar ficheiros de ambiente
 .env
+
+uploads
