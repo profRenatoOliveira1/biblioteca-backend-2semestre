@@ -1,5 +1,10 @@
 Biblioteca estrutura .json
 
+ROLES: {
+  1: user
+  2: admin
+}
+
 --------------------------------------------------------------------------------------------
  .json Cadastrar Livros
  
