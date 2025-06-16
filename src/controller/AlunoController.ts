@@ -27,27 +27,25 @@ class AlunoController extends Aluno {
      */
     static async todos(req: Request, res: Response) {
         try {
-            const listaDeAlunos = await Aluno.listarAlunos();
-
-            res.status(200).json(listaDeAlunos);
+            const listaDeAlunos = await Aluno.listarAlunos(); // recupera lista de alunos
+            res.status(200).json(listaDeAlunos); // retorna JSON com a lista de alunos
         } catch (error) {
-            console.log(`Erro ao acessar método herdado: ${error}`);
-
-            res.status(400).json("Erro ao recuperar as informações do Aluno");
+            console.log(`Erro ao acessar método herdado: ${error}`);    // Exibe erros da consulta no console
+            res.status(400).json("Erro ao recuperar as informações do Aluno");  // Retorna mensagem de erro com status code 400
         }
     }
 
-   /**
-     * Cadastra um novo aluno.
-     * @param req Objeto de requisição HTTP com os dados do aluno.
-     * @param res Objeto de resposta HTTP.
-     * @returns Mensagem de sucesso ou erro em formato JSON.
-     */
+    /**
+      * Cadastra um novo aluno.
+      * @param req Objeto de requisição HTTP com os dados do aluno.
+      * @param res Objeto de resposta HTTP.
+      * @returns Mensagem de sucesso ou erro em formato JSON.
+      */
     static async cadastrar(req: Request, res: Response) {
         try {
             // Desestruturando objeto recebido pelo front-end
             const dadosRecebidos: AlunoDTO = req.body;
-            
+
             // Instanciando objeto Aluno
             const novoAluno = new Aluno(
                 dadosRecebidos.nome,
@@ -55,7 +53,7 @@ class AlunoController extends Aluno {
                 dadosRecebidos.dataNascimento ?? new Date("1900-01-01"),
                 dadosRecebidos.endereco ?? '',
                 dadosRecebidos.email ?? '',
-                dadosRecebidos.celular              
+                dadosRecebidos.celular
             );
 
             // Chama o método para persistir o aluno no banco de dados
@@ -83,7 +81,7 @@ class AlunoController extends Aluno {
         try {
             const idAluno = parseInt(req.query.idAluno as string);
             const result = await Aluno.removerAluno(idAluno);
-            
+
             if (result) {
                 return res.status(200).json('Aluno removido com sucesso');
             } else {
@@ -107,7 +105,7 @@ class AlunoController extends Aluno {
         try {
             // Desestruturando objeto recebido pelo front-end
             const dadosRecebidos: AlunoDTO = req.body;
-            
+
             // Instanciando objeto Aluno
             const aluno = new Aluno(
                 dadosRecebidos.nome,
@@ -115,7 +113,7 @@ class AlunoController extends Aluno {
                 dadosRecebidos.dataNascimento ?? new Date("1900-01-01"),
                 dadosRecebidos.endereco ?? '',
                 dadosRecebidos.email ?? '',
-                dadosRecebidos.celular              
+                dadosRecebidos.celular
             );
 
             // Define o ID do aluno, que deve ser passado na query string
