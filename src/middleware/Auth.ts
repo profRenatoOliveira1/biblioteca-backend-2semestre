@@ -13,7 +13,7 @@ const database = new DataBaseModel().pool;
  * (Não obrigatório, mas recomendado)
  */
 interface JwtPayload {
-    uuid: string;
+    id: number;
     nome: string;
     email: string;
     exp: number;
@@ -35,7 +35,7 @@ export class Auth {
         const { username, senha } = req.body;
 
         // query para validar email e senha informados pelo cliente
-        const querySelectUser = `SELECT id_usuario, uuid, nome, username, email, role FROM usuario WHERE username=$1 AND senha=$2;`;
+        const querySelectUser = `SELECT id_usuario, nome, username, senha FROM usuario WHERE username=$1 AND senha=$2;`;
 
         try {
             // faz a requisição ao banco de dados
@@ -47,15 +47,12 @@ export class Auth {
                 // cria um objeto chamado professor com o id, nome e email. Essas informações serão devolvidas ao cliente
                 const usuario = {
                     id_usuario: queryResult.rows[0].id_usuario,
-                    uuid: queryResult.rows[0].uuid,
                     nome: queryResult.rows[0].nome,
-                    username: queryResult.rows[0].username,
-                    email: queryResult.rows[0].email,
-                    role: queryResult.rows[0].role
+                    username: queryResult.rows[0].username
                 }
 
                 // Gera o token do usuário, passando como parâmetro as informações do objeto professor
-                const tokenUsuario = Auth.generateToken(usuario.uuid, usuario.nome, usuario.username, username.email);
+                const tokenUsuario = Auth.generateToken(parseInt(usuario.id_usuario), usuario.nome, usuario.username);
 
                 // retorna ao cliente o status de autenticação (verdadeiro), o token e o objeto professor
                 // tudo isso encapsulado em um JSON
@@ -79,14 +76,14 @@ export class Auth {
      * @param email Email do usuário no banco de dados
      * @returns Token de autenticação do usuário
      */
-    static generateToken(uuid: string, nome: string, username: string, email: string) {
+    static generateToken(id: number, nome: string, username: string) {
         // retora o token gerado
         // id: ID do professor no banco de dados
         // nome: nome do professor no banco de dados
         // email: email do professor no banco de dados
         // SECRET: palavra secreta
         // expiresIn: tempo até a expiração do token (neste exemplo, 1 hora)
-        return jwt.sign({ uuid, nome, username, email }, SECRET, { expiresIn: '4h' });
+        return jwt.sign({ id, nome, username }, SECRET, { expiresIn: '1h' });
     }
 
     /**
@@ -124,10 +121,10 @@ export class Auth {
             }
 
             // desestrutura o objeto JwtPayload e armazena as informações exp e id em variáveis 
-            const { exp, uuid } = decoded as JwtPayload;
+            const { exp, id } = decoded as JwtPayload;
 
             // verifica se existe data de expiração ou o id no token que foi recebido pelo cliente
-            if (!exp || !uuid) {
+            if (!exp || !id) {
                 console.log('Data de expiração ou ID não encontrada no token');
                 // enviada uma mensagem e o status de autenticação (falso)
                 return res.status(401).json({ message: "Token inválido, faça o login", auth: false }).end();
@@ -142,7 +139,7 @@ export class Auth {
                 return res.status(401).json({ message: "Token expirado, faça o login novamente", auth: false }).end();
             }
 
-            req.body.userId = uuid;
+            req.body.userId = id;
 
             next();
         });

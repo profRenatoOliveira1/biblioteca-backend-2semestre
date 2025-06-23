@@ -4,13 +4,13 @@ import AlunoController from "./controller/AlunoController";
 import LivroController from "./controller/LivroController";
 import EmprestimoController from "./controller/EmprestimoController";
 import UsuarioController from "./controller/UsuarioController";
+import { upload, uploadCapa } from "./middleware/multerConfig"; // caminho pode variar dependendo da estrutura
 import { Auth } from "./middleware/Auth";
-import { upload, uploadCapa } from "./middleware/multerConfig";
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.json({ mensagem: "Rota padrão" })
+    res.json({ mensagem: `Aplicação online.`, timestamp: `${new Date().toLocaleString('pt-br')}`})
 });
 
 router.post('/login', Auth.validacaoUsuario);
