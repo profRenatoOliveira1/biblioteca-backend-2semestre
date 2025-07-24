@@ -26,7 +26,7 @@ class LivroController extends Livro {
             return res.status(200).json(listaDeLivros);
         } catch (error) {
             console.error(`Erro ao listar livros: ${error}`);
-            return res.status(500).json({ mensagem: "Erro ao recuperar as informações dos livros" });
+            return res.status(500).json({ mensagem: "Erro ao recuperar as informações dos livros." });
         }
     }
 
@@ -56,13 +56,13 @@ class LivroController extends Livro {
                     await Livro.atualizarImagemCapa(nomeImagem, novoLivro.getIdLivro());
                 }
 
-                return res.status(200).json({ mensagem: 'Livro cadastrado com sucesso' });
+                return res.status(200).json({ mensagem: 'Livro cadastrado com sucesso.' });
             } else {
-                return res.status(400).json({ mensagem: 'Não foi possível cadastrar o livro no banco de dados' });
+                return res.status(500).json({ mensagem: 'Não foi possível cadastrar o livro no banco de dados.' });
             }
         } catch (error) {
             console.error(`Erro ao cadastrar o livro: ${error}`);
-            return res.status(500).json({ mensagem: 'Erro ao cadastrar o livro' });
+            return res.status(500).json({ mensagem: 'Erro ao cadastrar o livro.' });
         }
     }
 
@@ -71,19 +71,19 @@ class LivroController extends Livro {
             const idLivro = parseInt(req.query.idLivro as string);
 
             if (isNaN(idLivro)) {
-                return res.status(400).json({ mensagem: "ID do livro inválido" });
+                return res.status(400).json({ mensagem: 'ID do livro inválido.' });
             }
 
             const result = await Livro.removerLivro(idLivro);
 
             if (result) {
-                return res.status(200).json({ mensagem: 'Livro removido com sucesso' });
+                return res.status(201).json({ mensagem: 'Livro removido com sucesso.' });
             } else {
-                return res.status(404).json({ mensagem: 'Livro não encontrado para exclusão' });
+                return res.status(404).json({ mensagem: 'Livro não encontrado para exclusão.' });
             }
         } catch (error) {
-            console.error("Erro ao remover o livro:", error);
-            return res.status(500).json({ mensagem: "Erro ao remover o livro" });
+            console.error("Erro ao remover o livro: ", error);
+            return res.status(500).json({ mensagem: 'Erro ao remover o livro.' });
         }
     }
 
@@ -92,7 +92,7 @@ class LivroController extends Livro {
             const idLivro = parseInt(req.query.idLivro as string);
 
             if (isNaN(idLivro)) {
-                return res.status(400).json({ mensagem: "ID do livro inválido" });
+                return res.status(400).json({ mensagem: "ID do livro inválido." });
             }
 
             const dadosRecebidos: LivroDTO = req.body;
@@ -116,11 +116,11 @@ class LivroController extends Livro {
             if (sucesso) {
                 return res.status(200).json({ mensagem: "Cadastro atualizado com sucesso!" });
             } else {
-                return res.status(400).json({ mensagem: "Não foi possível atualizar o livro no banco de dados" });
+                return res.status(400).json({ mensagem: "Não foi possível atualizar o livro no banco de dados." });
             }
         } catch (error) {
             console.error(`Erro ao atualizar livro: ${error}`);
-            return res.status(500).json({ mensagem: "Erro ao atualizar o livro" });
+            return res.status(500).json({ mensagem: "Erro ao atualizar o livro." });
         }
     }
 }

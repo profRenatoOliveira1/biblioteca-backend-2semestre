@@ -247,7 +247,7 @@ export class Aluno {
             // Se ocorrer algum erro dentro deste bloco, ele será capturado pelo catch.
 
             // Define a query SQL para selecionar um aluno com base no ID fornecido
-            const querySelectAluno = `SELECT * FROM aluno WHERE id_aluno = ${idAluno}`;
+            const querySelectAluno = `SELECT * FROM aluno WHERE id_aluno = ${idAluno} && status_aluno = TRUE`;
 
             // Executa a consulta no banco de dados e aguarda o resultado
             const respostaBD = await database.query(querySelectAluno);
@@ -331,7 +331,7 @@ export class Aluno {
      * @param idAluno ID do aluno a ser removido
      * @returns Boolean indicando se a remoção foi bem-sucedida
     */
-    static async removerAluno(idAluno: number): Promise<number> {
+    static async removerAluno(idAluno: number): Promise<boolean> {
         // variável para controle de resultado da consulta (query)
         try {
             // recupera o objeto do aluno a ser deletado
@@ -356,19 +356,19 @@ export class Aluno {
                 await database.query(queryDeleteAluno)
                     .then((result) => {
                         if (result.rowCount != 0) {
-                            return 1; // Se a operação foi bem-sucedida, define queryResult como true.
+                            return true; // Se a operação foi bem-sucedida, define queryResult como true.
                         }
                     });
             }
             // retorna o resultado da query
-            return 9;
+            return false;
 
             // captura qualquer erro que aconteça
         } catch (error) {
             // Em caso de erro na consulta, exibe o erro no console e retorna false.
             console.log(`Erro na consulta: ${error}`);
             // retorna false
-            return 0;
+            return false;
         }
     }
 
@@ -378,7 +378,7 @@ export class Aluno {
     * @param aluno Objeto do tipo Aluno com os novos dados
     * @returns true caso sucesso, false caso erro
     */
-    static async atualizarAluno(aluno: Aluno): Promise<number> {
+    static async atualizarAluno(aluno: Aluno): Promise<boolean> {
         try {
             // recupera o objeto do aluno a ser deletado
             const alunoConsulta = await this.listarAluno(aluno.idAluno);
@@ -398,17 +398,17 @@ export class Aluno {
                 await database.query(queryAtualizarAluno)
                     .then((result) => {
                         if (result.rowCount != 0) {
-                            return 1; // Se a operação foi bem-sucedida, define queryResult como true.
+                            return true; // Se a operação foi bem-sucedida, define queryResult como true.
                         }
                     });
             }
 
             // Retorna o resultado da operação para quem chamou a função.
-            return 9;
+            return false;
         } catch (error) {
             // Em caso de erro na consulta, exibe o erro no console e retorna false.
             console.log(`Erro na consulta: ${error}`);
-            return 0;
+            return false;
         }
     }
 }

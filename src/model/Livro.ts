@@ -364,7 +364,7 @@ export class Livro {
      * @param idLivro ID do livro a ser removido
      * @returns Boolean indicando se a remoção foi bem-sucedida
     */
-    static async removerLivro(id_livro: number): Promise<Boolean> {
+    static async removerLivro(id_livro: number): Promise<boolean> {
         // variável de controle da execução da query
         let queryResult = false;
 
@@ -407,7 +407,7 @@ export class Livro {
      * @param livro Objeto do tipo Livro com os novos dados
      * @returns true caso sucesso, false caso erro
      */
-    static async atualizarCadastroLivro(livro: Livro): Promise<Boolean> {
+    static async atualizarCadastroLivro(livro: Livro): Promise<boolean> {
         let queryResult = false; // Variável para armazenar o resultado da operação.
         try {
             // Construção da query SQL para atualizar os dados do livro no banco de dados.

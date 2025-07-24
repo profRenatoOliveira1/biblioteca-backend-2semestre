@@ -47,7 +47,7 @@ class UsuarioController extends Usuario {
 
             // Se não foi possível cadastrar, retorna erro
             if (!uuid) {
-                return res.status(500).json({ erro: 'Erro ao cadastrar usuário' });
+                return res.status(500).json({ erro: 'Erro ao cadastrar usuário.' });
             }
 
             // Se uma imagem de perfil foi enviada, renomeia e atualiza o nome no banco
@@ -63,11 +63,11 @@ class UsuarioController extends Usuario {
             }
 
             // Retorna sucesso
-            return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso' });
+            return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso.' });
         } catch (error) {
             // Em caso de erro, registra nos logs e retorna erro para o cliente
             console.error('Erro ao cadastrar usuário:', error);
-            res.status(500).json({ erro: 'Erro ao cadastrar usuário', detalhes: error });
+            res.status(500).json({ erro: 'Erro ao cadastrar usuário.', detalhes: error });
         }
     }
 }

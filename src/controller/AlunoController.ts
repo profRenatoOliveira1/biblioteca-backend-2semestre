@@ -31,7 +31,7 @@ class AlunoController extends Aluno {
             res.status(200).json(listaDeAlunos); // retorna JSON com a lista de alunos
         } catch (error) {
             console.log(`Erro ao acessar método herdado: ${error}`);    // Exibe erros da consulta no console
-            res.status(400).json("Erro ao recuperar as informações do Aluno");  // Retorna mensagem de erro com status code 400
+            res.status(500).json("Erro ao recuperar as informações do aluno.");  // Retorna mensagem de erro com status code 400
         }
     }
 
@@ -61,13 +61,13 @@ class AlunoController extends Aluno {
 
             // Verifica se a query foi executada com sucesso
             if (result) {
-                return res.status(200).json(`Aluno cadastrado com sucesso`);
+                return res.status(201).json({ mensagem: `Aluno cadastrado com sucesso.` });
             } else {
-                return res.status(400).json('Não foi possível cadastrar o aluno no banco de dados');
+                return res.status(500).json({ mensagem: 'Não foi possível cadastrar o aluno no banco de dados.' });
             }
         } catch (error) {
             console.log(`Erro ao cadastrar o aluno: ${error}`);
-            return res.status(400).json('Erro ao cadastrar o aluno');
+            return res.status(500).json({ mensagem: 'Erro ao cadastrar o aluno.' });
         }
     }
 
@@ -80,17 +80,15 @@ class AlunoController extends Aluno {
     static async remover(req: Request, res: Response): Promise<Response> {
         try {
             const idAluno = parseInt(req.query.idAluno as string);
-            const result = await Aluno.removerAluno(idAluno);
 
-            if (result) {
-                return res.status(200).json('Aluno removido com sucesso');
+            if (await Aluno.removerAluno(idAluno)) {
+                return res.status(200).json({ mensagem: 'Aluno removido com sucesso.' });
             } else {
-                return res.status(401).json('Erro ao deletar aluno');
+                return res.status(500).json({ mensagem: 'Erro ao remover aluno.' });
             }
         } catch (error) {
-            console.log("Erro ao remover o Aluno");
-            console.log(error);
-            return res.status(500).send("error");
+            console.log(`Erro ao remover aluno: ${error}`)
+            return res.status(500).json({ mensagem: 'Erro ao remover aluno.' });
         }
     }
 
@@ -121,15 +119,15 @@ class AlunoController extends Aluno {
 
             // Chama o método para atualizar o cadastro do aluno no banco de dados
             if (await Aluno.atualizarAluno(aluno)) {
-                return res.status(200).json({ mensagem: "Cadastro atualizado com sucesso!" });
+                return res.status(200).json({ mensagem: "Cadastro atualizado com sucesso." });
             } else {
-                return res.status(400).json('Não foi possível atualizar o aluno no banco de dados');
+                return res.status(500).json({ mensagem: 'Não foi possível atualizar o aluno no banco de dados.' });
             }
         } catch (error) {
             // Caso ocorra algum erro, este é registrado nos logs do servidor
-            console.error(`Erro no modelo: ${error}`);
+            console.error(`Erro ao atualizar aluno: ${error}`);
             // Retorna uma resposta com uma mensagem de erro
-            return res.json({ mensagem: "Erro ao atualizar aluno." });
+            return res.status(500).json({ mensagem: "Erro ao atualizar aluno." });
         }
     }
 }

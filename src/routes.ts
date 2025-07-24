@@ -4,7 +4,7 @@ import AlunoController from "./controller/AlunoController";
 import LivroController from "./controller/LivroController";
 import EmprestimoController from "./controller/EmprestimoController";
 import UsuarioController from "./controller/UsuarioController";
-import { upload, uploadCapa } from "./middleware/multerConfig"; // caminho pode variar dependendo da estrutura
+import { upload, uploadCapa } from "./middleware/multerConfig";
 import { Auth } from "./middleware/Auth";
 
 const router = express.Router();
