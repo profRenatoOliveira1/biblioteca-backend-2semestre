@@ -247,7 +247,7 @@ export class Aluno {
             // Se ocorrer algum erro dentro deste bloco, ele será capturado pelo catch.
 
             // Define a query SQL para selecionar um aluno com base no ID fornecido
-            const querySelectAluno = `SELECT * FROM aluno WHERE id_aluno = ${idAluno} && status_aluno = TRUE`;
+            const querySelectAluno = `SELECT * FROM aluno WHERE id_aluno = ${idAluno}`;
 
             // Executa a consulta no banco de dados e aguarda o resultado
             const respostaBD = await database.query(querySelectAluno);
@@ -395,12 +395,11 @@ export class Aluno {
                                                 WHERE id_aluno = ${aluno.idAluno}`;
 
                 // Executa a query de atualização e verifica se a operação foi bem-sucedida.
-                await database.query(queryAtualizarAluno)
-                    .then((result) => {
-                        if (result.rowCount != 0) {
-                            return true; // Se a operação foi bem-sucedida, define queryResult como true.
-                        }
-                    });
+                const respostaBD = await database.query(queryAtualizarAluno)
+
+                if (respostaBD.rowCount != 0) {
+                    return true;
+                }
             }
 
             // Retorna o resultado da operação para quem chamou a função.
