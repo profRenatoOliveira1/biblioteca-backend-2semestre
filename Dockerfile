@@ -30,7 +30,7 @@ COPY package*.json ./
 RUN npm install --only=production
 
 # Expor a porta que a aplicação vai rodar
-EXPOSE 3333
+EXPOSE 3000
 
 # Comando para rodar a aplicação
 CMD ["node", "dist/index.js"]
