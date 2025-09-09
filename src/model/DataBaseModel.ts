@@ -2,7 +2,7 @@ import pg from "pg";
 import dotenv from "dotenv";
 dotenv.config();
 
-export class DatabaseModel {
+export class DataBaseModel {
   private _pool: pg.Pool;
 
   constructor() {

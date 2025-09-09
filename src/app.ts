@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { DatabaseModel } from "./model/DataBaseModel.js";
+import { DataBaseModel } from "./model/DataBaseModel.js";
 import { server } from "./server.js";
 
 // Pega porta com segurança: Render -> SERVER_PORT -> 3000
@@ -15,7 +15,7 @@ function getPort(): number {
 
 const port = getPort();
 
-new DatabaseModel().testeConexao().then((ok) => {
+new DataBaseModel().testeConexao().then((ok) => {
     if (ok) {
         server.listen(port, '0.0.0.0', () => {
             console.log(`Servidor rodando na porta ${port}`);
