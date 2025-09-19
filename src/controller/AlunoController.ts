@@ -79,12 +79,25 @@ class AlunoController extends Aluno {
      */
     static async remover(req: Request, res: Response): Promise<Response> {
         try {
+            // const idAluno = parseInt(req.query.idAluno as string);
+
+            // if (await Aluno.removerAluno(idAluno)) {
+            //     return res.status(200).json({ mensagem: 'Aluno removido com sucesso.' });
+            // } else {
+            //     return res.status(500).json({ mensagem: 'Erro ao remover aluno.' });
+            // }
             const idAluno = parseInt(req.query.idAluno as string);
 
-            if (await Aluno.removerAluno(idAluno)) {
-                return res.status(200).json({ mensagem: 'Aluno removido com sucesso.' });
+            if (isNaN(idAluno)) {
+                return res.status(400).json({ mensagem: 'ID do aluno inválido.' });
+            }
+
+            const result = await Aluno.removerAluno(idAluno);
+
+            if (result) {
+                return res.status(201).json({ mensagem: 'Aluno removido com sucesso.' });
             } else {
-                return res.status(500).json({ mensagem: 'Erro ao remover aluno.' });
+                return res.status(404).json({ mensagem: 'Aluno não encontrado para exclusão.' });
             }
         } catch (error) {
             console.log(`Erro ao remover aluno: ${error}`)
