@@ -308,6 +308,39 @@ export class Livro {
     }
 
     /**
+     * Retorna as informações de um livro informado pelo ID
+     * 
+     * @param idLivro Identificador único do livro
+     * @returns Objeto com informações do livro
+     */
+    static async listarLivro(idLivro: number): Promise<Livro | null> {
+        try {
+            const querySelectLivro = `SELECT * FROM livro WHERE id_livro = ${idLivro}`;
+
+            const respostaBD = await database.query(querySelectLivro);
+
+            let livro: Livro = new Livro(
+                respostaBD.rows[0].titulo,
+                respostaBD.rows[0].autor,
+                respostaBD.rows[0].editora,
+                respostaBD.rows[0].ano_publicacao,
+                respostaBD.rows[0].isbn,
+                respostaBD.rows[0].quant_total,
+                respostaBD.rows[0].quant_disponivel,
+                respostaBD.rows[0].valor_aquisicao,
+                respostaBD.rows[0].status_livro_emprestado
+            );
+
+            livro.setIdLivro(respostaBD.rows[0].id_livro);
+
+            return livro;
+        } catch (error) {
+            console.error(`Erro ao realizar consulta. ${error}`);
+            return null;
+        }
+    }
+
+    /**
      * Cadastra um novo livro no banco de dados
      * @param livro Objeto Livro contendo as informações a serem cadastradas
      * @returns Boolean indicando se o cadastro foi bem-sucedido

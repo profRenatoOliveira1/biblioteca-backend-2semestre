@@ -210,6 +210,35 @@ export class Emprestimo {
     }
 
     /**
+     * Retorna as informações de um empréstimo informado pelo ID
+     * 
+     * @param idEmprestimo Identificador único do empréstimo
+     * @returns Objeto com informações do empréstimo
+     */
+    static async listarEmprestimo(idEmprestimo: number): Promise<Emprestimo | null> {
+        try {
+            const querySelectEmprestimo = `SELECT * FROM emprestimo WHERE id_emprestimo = ${idEmprestimo};`;
+
+            const respostaBD = await database.query(querySelectEmprestimo);
+
+            let emprestimo: Emprestimo = new Emprestimo(
+                respostaBD.rows[0].id_aluno,
+                respostaBD.rows[0].id_livro,
+                respostaBD.rows[0].data_emprestimo,
+                respostaBD.rows[0].data_devolucao,
+                respostaBD.rows[0].status_emprestimo
+            );
+
+            emprestimo.setIdEmprestimo(respostaBD.rows[0].id_emprestimo);
+
+            return emprestimo;
+        } catch (error) {
+            console.error(`Erro ao realizar consulta: ${error}`);
+            return null;
+        }
+    }
+
+    /**
      * Cadastra um novo empréstimo no banco de dados
      * 
      * @param idAluno : number

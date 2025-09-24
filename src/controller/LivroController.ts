@@ -30,6 +30,18 @@ class LivroController extends Livro {
         }
     }
 
+    static async livro(req: Request, res: Response) {
+        try {
+            const idLivro = parseInt(req.query.idLivro as string);
+
+            const livro = await Livro.listarLivro(idLivro);
+            res.status(200).json(livro);
+        } catch (error) {
+            console.log(`Erro ao acessar método herdado: ${error}`);    // Exibe erros da consulta no console
+            res.status(500).json("Erro ao recuperar as informações do livro.");  // Retorna mensagem de erro com status code 400
+        }
+    }
+
     static async cadastrar(req: Request, res: Response) {
         try {
             const dadosRecebidos: LivroDTO = req.body;

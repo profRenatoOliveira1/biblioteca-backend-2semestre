@@ -36,6 +36,24 @@ class AlunoController extends Aluno {
     }
 
     /**
+     * Retorna informações de um aluno
+     * @param req Objeto de requisição HTTP
+     * @param res Objeto de resposta HTTP.
+     * @returns Informações de aluno em formato JSON.
+     */
+    static async aluno(req: Request, res: Response) {
+        try {
+            const idAluno = parseInt(req.query.idAluno as string);
+
+            const aluno = await Aluno.listarAluno(idAluno);
+            res.status(200).json(aluno);
+        } catch (error) {
+            console.log(`Erro ao acessar método herdado: ${error}`);    // Exibe erros da consulta no console
+            res.status(500).json("Erro ao recuperar as informações do aluno.");  // Retorna mensagem de erro com status code 400
+        }
+    }
+
+    /**
       * Cadastra um novo aluno.
       * @param req Objeto de requisição HTTP com os dados do aluno.
       * @param res Objeto de resposta HTTP.

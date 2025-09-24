@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import { DataBaseModel } from "./model/DataBaseModel.js";
-import { server } from "./server.js";
+import { DataBaseModel } from "./model/DataBaseModel";
+import { server } from "./server";
 
 // Pega porta com segurança: Render -> SERVER_PORT -> 3000
 function getPort(): number {

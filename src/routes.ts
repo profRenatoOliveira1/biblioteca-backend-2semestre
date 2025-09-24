@@ -17,18 +17,21 @@ router.post('/login', Auth.validacaoUsuario);
 
 // CRUD Aluno
 router.get(SERVER_ROUTES.LISTAR_ALUNOS, Auth.verifyToken, AlunoController.todos);
+router.get(SERVER_ROUTES.LISTAR_ALUNO, Auth.verifyToken, AlunoController.aluno);
 router.post(SERVER_ROUTES.NOVO_ALUNO, Auth.verifyToken, AlunoController.cadastrar);
 router.put(SERVER_ROUTES.REMOVER_ALUNO, Auth.verifyToken, AlunoController.remover);
 router.put(SERVER_ROUTES.ATUALIZAR_ALUNO, Auth.verifyToken, AlunoController.atualizar);
 
 //CRUD Livro
 router.get(SERVER_ROUTES.LISTAR_LIVROS, Auth.verifyToken, LivroController.todos);
+router.get(SERVER_ROUTES.LISTAR_LIVRO, Auth.verifyToken, LivroController.livro);
 router.post(SERVER_ROUTES.NOVO_LIVRO, Auth.verifyToken, uploadCapa.single('imagemCapa'), LivroController.cadastrar);
 router.put(SERVER_ROUTES.REMOVER_LIVRO, Auth.verifyToken, LivroController.remover);
 router.put(SERVER_ROUTES.ATUALIZAR_LIVRO, Auth.verifyToken, LivroController.atualizar);
 
 //CRUD Emprestimo
 router.get(SERVER_ROUTES.LISTAR_EMPRESTIMOS, Auth.verifyToken, EmprestimoController.todos);
+router.get(SERVER_ROUTES.LISTAR_EMPRESTIMO, Auth.verifyToken, EmprestimoController.emprestimo);
 router.post(SERVER_ROUTES.NOVO_EMPRESTIMO, Auth.verifyToken, EmprestimoController.cadastrar);
 router.put(SERVER_ROUTES.ATUALIZAR_EMPRESTIMO, Auth.verifyToken, EmprestimoController.atualizar);
 router.put(SERVER_ROUTES.REMOVER_EMPRESTIMO, Auth.verifyToken, EmprestimoController.remover);
